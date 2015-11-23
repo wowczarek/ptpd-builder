@@ -6,10 +6,10 @@ Written some time in 2014 by Wojciech Owczarek for the PTPd project. Licence is 
 
 ##### Assumptions:
 
-* SSH keys in place
+* SSH keys in place: having parallel processes asking for password is, erm, suboptimal
 * ssh config has the right username preset
 * hostnames are resolvable, etc
-* your target OSes can run the configure script
+* your target OSes can all run the configure script
 * you are not a muppet
 
 ##### Dependencies:
@@ -20,9 +20,9 @@ Written some time in 2014 by Wojciech Owczarek for the PTPd project. Licence is 
 ##### Setting up - it's all in flat files:
 
 * ./settings: included before the build - source directory definition and binary name
-* ./buildhosts: list of hostnames to SSH to, one per line, no comment or whitespace removal, so know what you're doing
 * ./configopts: ./configure parameters - can/should be a symlink so it's easy to switch between different configs
-* ./buildscript: this is what is executed on each host - so any OS (uname) specific stuff should be case'd there.
+* ./buildhosts: list of hostnames to SSH to, one per line, no comment or whitespace removal, so know what you're doing; also a symlink
+* ./buildscript: this is what is executed on each host - so any OS (uname) specific stuff should be case'd there
 
 ##### Movin' it, doin' it, y'know
 
