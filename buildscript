@@ -1,0 +1,63 @@
+#!/bin/sh
+pkgver=$1
+case `uname` in
+
+QNX)
+
+. /etc/profile
+    ;;
+
+*)
+
+esac
+
+CONFIGOPTS=`cat configopts`
+#rm configopts
+builddir=ptpd-build
+
+{
+echo
+echo ========= `hostname` ========
+echo
+} >&2
+
+rm -rf $builddir
+mkdir $builddir
+mv $pkgver.tar.gz $builddir
+cd $builddir
+chmod 644 $pkgver.tar.gz
+tar zxf $pkgver.tar.gz
+cd $pkgver
+
+#find . -exec touch {} \;
+
+#autoreconf -vi
+
+case `uname` in
+
+SunOS)
+
+    CC="/opt/gcc-4.4.4/bin/gcc" ./configure $CONFIGOPTS
+    ;;
+
+FreeBSD)
+    autoreconf
+    ./configure $CONFIGOPTS
+    ;;
+
+QNX)
+
+./configure $CONFIGOPTS
+;;
+
+
+*)
+
+./configure $CONFIGOPTS
+;;
+
+esac
+
+
+make
+
