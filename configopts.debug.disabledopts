@@ -1,0 +1,1 @@
+--with-max-unicast-destinations=128 --enable-runtime-debug --enable-debug-level=all --disable-statistics --disable-posix-timers --disable-pcap --disable-snmp

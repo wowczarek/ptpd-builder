@@ -1,0 +1,71 @@
+#!/bin/bash
+
+. ./settings
+
+[ "$1x" != "x" ] && test -x $1 && srcdir=$1
+
+if [ ! -f $srcdir/m4/version.m4 ]; then
+echo "could not find $srcdir/m4/version.m4"
+exit -1
+fi
+
+VER=`grep VERSION $srcdir/m4/version.m4 2>/dev/null | sed -e 's/.*\[//g' -e 's/\])//g'`
+
+if [ "$VERx" == "x" ]; then
+echo "could not find version string in $srcdir/m4/version.m4"
+exit -1
+fi
+
+PKGVER=ptpd-$VER
+
+if [ -d ./$PKGVER ]; then
+rm -rf ./$PKGVER
+fi
+
+# resolve symlinks
+cp -aL $srcdir ./$PKGVER
+
+echo "******** $PKGVER build begin ************"
+echo
+echo "+++ Configure options: `cat configopts`"
+echo
+
+cur=`pwd`
+cd $PKGVER
+echo +++ preparing dist
+
+autoreconf -vi >/dev/null 2>&1
+./configure `cat $cur/configopts` >/dev/null 2>&1
+make dist >/dev/null 2>&1
+cd ..
+test -f "$PKGVER/$PKGVER.tar.gz" || exit
+mkdir -p buildlogs
+echo
+
+echo
+
+echo +++ distributing sources
+echo
+time parallel --gnu scp $PKGVER/$PKGVER.tar.gz buildscript configopts {}:./ < buildhosts
+echo
+echo +++ build hosts used:
+echo
+cat buildhosts
+echo
+echo
+echo +++ building on all build hosts
+echo
+time parallel --gnu ssh {} ./buildscript $PKGVER \> buildlogs/{} < buildhosts
+echo
+echo +++ fetching binaries
+echo
+time parallel --gnu "rm -rf binaries/{} ; mkdir -p binaries/{} ; scp {}:./ptpd-build/$PKGVER/src/$binaryname ./binaries/{}/$binaryname.{} " < buildhosts
+echo
+echo "******** $PKGVER build end ************"
+echo
+echo +++ cleaning up
+echo
+echo "+++ done"
+echo
+rm -rf $PKGVER
+

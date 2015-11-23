@@ -1,0 +1,4 @@
+# where the source is stored
+srcdir=$HOME/ptpd-head
+# output binary file name
+binaryname=ptpd2
