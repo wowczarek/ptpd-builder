@@ -30,3 +30,7 @@
 
 # Debug files
 *.dSYM/
+
+# ptpd-builder specific stuff
+buildlogs/
+binaries/
