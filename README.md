@@ -26,6 +26,6 @@ Written some time in 2014 by Wojciech Owczarek for the PTPd project. Licence is 
 
 ##### Movin' it, doin' it, y'know:
 
-* just run ./runbuilds and watch it burn. Most prep work has suppressed output, build scripts only print stderr to console, everything goes int buildlogs/$hostname
+* just run ./runbuilds and watch it burn. Most prep work has suppressed output, build scripts only print stderr to console, everything goes into buildlogs/$hostname
 * after builds are done, binaries are fetched to binaries/$host/$binaryname.$host
 
